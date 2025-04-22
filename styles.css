@@ -203,17 +203,26 @@
 
 
 /* Global Styles */
+:root {
+    --primary-color: #2d3436;
+    --accent-color: #0984e3;
+    --text-color: #2d3436;
+    --background-light: #f9f9f9;
+    --card-shadow: rgba(17, 12, 46, 0.1) 0px 48px 100px 0px;
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Poppins', sans-serif;
 }
 
 body {
-    line-height: 1.6;
-    color: #333;
-    background-color: #f5f5f5;
+    line-height: 1.8;
+    color: var(--text-color);
+    background-color: var(--background-light);
 }
 
 /* Hero Section */
@@ -221,64 +230,91 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 4rem 8%;
-    background: linear-gradient(135deg, #1a1a1a, #333);
-    color: white;
+    padding: 6rem 10%;
+    background: linear-gradient(135deg, #ffffff 0%, #f5f5f5 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.hero::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 30% 107%, #0984e3 0%, #74b9ff 5%, #81ecec 45%, #a8e6cf 60%, #dcedc1 90%);
+    opacity: 0.1;
+    top: 0;
+    left: 0;
 }
 
 .hero-content {
     flex: 1;
-    padding-right: 2rem;
+    padding-right: 4rem;
 }
 
 .hero-date {
     font-size: 0.9rem;
-    color: #888;
+    color: var(--accent-color);
     margin-bottom: 1rem;
+    letter-spacing: 2px;
 }
 
 .hero h1 {
-    font-size: 3rem;
-    margin-bottom: 1rem;
-    color: #fff;
+    font-size: 3.5rem;
+    margin-bottom: 1.5rem;
+    color: var(--primary-color);
+    line-height: 1.2;
 }
 
 .hero-subtitle {
-    font-size: 1.5rem;
-    color: #ccc;
-}
-
-.year-tag {
-    display: inline-block;
-    padding: 0.5rem 1rem;
-    background: rgba(255,255,255,0.1);
-    border-radius: 20px;
-    margin-top: 1rem;
+    font-size: 1.8rem;
+    color: var(--accent-color);
+    font-weight: 600;
 }
 
 .hero-image img {
-    width: 300px;
-    height: 300px;
-    border-radius: 50%;
+    width: 350px;
+    height: 350px;
+    border-radius: 30px;
     object-fit: cover;
-    border: 5px solid rgba(255,255,255,0.2);
+    box-shadow: var(--card-shadow);
+    transition: var(--transition);
+}
+
+.hero-image img:hover {
+    transform: translateY(-10px);
 }
 
 /* Section Styles */
 section {
-    padding: 4rem 8%;
+    padding: 6rem 10%;
     background: white;
-    margin: 2rem 0;
+    margin: 3rem 0;
+    border-radius: 30px;
+    box-shadow: var(--card-shadow);
 }
 
 h2 {
-    font-size: 2rem;
-    margin-bottom: 2rem;
-    color: #1a1a1a;
+    font-size: 2.5rem;
+    margin-bottom: 3rem;
+    color: var(--primary-color);
     text-align: center;
+    position: relative;
 }
 
-/* Grid Layouts */
+h2::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50px;
+    height: 3px;
+    background: var(--accent-color);
+    border-radius: 2px;
+}
+
+/* Grid Layouts with Improved Spacing */
 .expertise-grid,
 .goals-grid,
 .interests-grid,
@@ -288,12 +324,12 @@ h2 {
 .skills-grid,
 .tools-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 2rem;
-    margin-top: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2.5rem;
+    margin-top: 3rem;
 }
 
-/* Card Styles */
+/* Card Styles with Better Animation */
 .expertise-card,
 .goal-card,
 .interest-card,
@@ -303,10 +339,12 @@ h2 {
 .skill-card,
 .tool-card {
     background: white;
-    padding: 2rem;
-    border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-    transition: transform 0.3s ease;
+    padding: 2.5rem;
+    border-radius: 20px;
+    box-shadow: rgba(17, 12, 46, 0.1) 0px 48px 100px 0px;
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
 }
 
 .expertise-card:hover,
@@ -317,87 +355,91 @@ h2 {
 .strength-card:hover,
 .skill-card:hover,
 .tool-card:hover {
-    transform: translateY(-5px);
+    transform: translateY(-10px);
+    box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;
 }
 
-/* Icon Styles */
-i {
-    font-size: 2rem;
-    margin-bottom: 1rem;
-    color: #007bff;
+/* Social Icons with Original Brand Colors */
+.social-icons {
+    display: flex;
+    gap: 1.5rem;
+    margin: 2rem 0;
 }
 
-/* About Section */
+.social-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    transition: var(--transition);
+    background: white;
+    box-shadow: rgba(17, 12, 46, 0.1) 0px 48px 100px 0px;
+}
+
+/* Brand Colors for Social Icons */
+.fa-linkedin {
+    color: #0077b5;
+}
+
+.fa-instagram {
+    color: #e4405f;
+}
+
+.fa-facebook {
+    color: #1877f2;
+}
+
+.fa-snapchat {
+    color: #fffc00;
+}
+
+.fa-spotify {
+    color: #1db954;
+}
+
+.social-icon:hover {
+    transform: translateY(-5px) scale(1.1);
+}
+
+/* About Section with Better Layout */
 .about-grid {
     display: grid;
     grid-template-columns: 1.5fr 1fr;
-    gap: 3rem;
+    gap: 4rem;
     align-items: center;
 }
 
 .about-text p {
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
     font-size: 1.1rem;
+    line-height: 1.8;
 }
 
 .lifestyle-img {
     width: 100%;
-    border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    border-radius: 20px;
+    box-shadow: var(--card-shadow);
+    transition: var(--transition);
 }
 
-/* Social Links */
-.social-icons {
-    display: flex;
-    gap: 1rem;
-    margin-top: 2rem;
-}
-
-.social-icon {
-    color: #333;
-    font-size: 1.5rem;
-    transition: color 0.3s ease;
-}
-
-.social-icon:hover {
-    color: #007bff;
-}
-
-/* CTA Button */
-.cta-button {
-    display: inline-block;
-    padding: 1rem 2rem;
-    background: #007bff;
-    color: white;
-    text-decoration: none;
-    border-radius: 30px;
-    margin-top: 2rem;
-    transition: background 0.3s ease;
-}
-
-.cta-button:hover {
-    background: #0056b3;
-}
-
-/* Footer */
-footer {
-    text-align: center;
-    padding: 2rem;
-    background: #1a1a1a;
-    color: white;
+.lifestyle-img:hover {
+    transform: scale(1.02);
 }
 
 /* Responsive Design */
-@media (max-width: 768px) {
+@media (max-width: 968px) {
     .hero {
         flex-direction: column;
         text-align: center;
-        padding: 2rem 5%;
+        padding: 4rem 5%;
     }
 
     .hero-content {
         padding-right: 0;
-        margin-bottom: 2rem;
+        margin-bottom: 3rem;
     }
 
     .about-grid {
@@ -405,6 +447,11 @@ footer {
     }
 
     section {
-        padding: 2rem 5%;
+        padding: 4rem 5%;
+        margin: 1.5rem 0;
+    }
+
+    .social-icons {
+        justify-content: center;
     }
 }
