@@ -455,3 +455,40 @@ h2::after {
         justify-content: center;
     }
 }
+
+.social-links {
+    position: relative;
+    color: white;
+}
+
+.social-links .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7); /* Dark overlay for better text readability */
+    z-index: 1;
+}
+
+.social-links .hero-social {
+    position: relative;
+    z-index: 2; /* Place content above overlay */
+    background: transparent;
+}
+
+.social-links .hero-social-content h2,
+.social-links .title-block h1,
+.social-links .hero-description {
+    color: white;
+}
+
+.social-links .title-block .highlight {
+    color: var(--accent-color);
+}
+
+.social-links footer {
+    position: relative;
+    z-index: 2;
+    background: transparent;
+}
