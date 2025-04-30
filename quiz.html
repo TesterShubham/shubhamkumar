@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Knowledge Games - IQ, GK & Word Scramble</title>
+    <link rel="stylesheet" href="./styles.css">
+    <link rel="stylesheet" href="./quiz.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="icon" type="image/x-icon" href="images/sz.png">
+</head>
+<body>
+    <header class="hero">
+        <div class="hero-content">
+            <div class="hero-image">
+                <img src="images/profile.jpg" alt="Quiz Master">
+            </div>
+            <h1>Challenge Your Mind</h1>
+            <p>Test your knowledge with our interactive quizzes and word games. Are you ready to prove your intellectual prowess?</p>
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <div class="stat-value">3</div>
+                    <div class="stat-label">Game Modes</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">20+</div>
+                    <div class="stat-label">Questions</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">∞</div>
+                    <div class="stat-label">Possibilities</div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <div class="quiz-container">
+        <div class="quiz-header">
+            <h1>Knowledge Games</h1>
+            <p>Challenge yourself with IQ, General Knowledge, and Word Scramble!</p>
+        </div>
+
+        <div class="game-type-selector">
+            <button class="game-type-btn active" data-type="iq">IQ Quiz</button>
+            <button class="game-type-btn" data-type="gk">GK Quiz</button>
+            <button class="game-type-btn" data-type="word">Word Scramble</button>
+        </div>
+
+        <div id="quiz-section">
+            <div class="question-container">
+                <h2 id="question">Question goes here...</h2>
+                <div class="options-container" id="options"></div>
+            </div>
+
+            <div class="quiz-controls">
+                <button id="prev-btn" class="primary-btn" disabled>Previous</button>
+                <button id="next-btn" class="primary-btn">Next</button>
+            </div>
+
+            <div class="score-display">
+                Score: <span id="score">0</span> / <span id="total">0</span>
+            </div>
+
+            <div id="result" class="result-container">
+                <h2>Final Result</h2>
+                <p id="result-text"></p>
+            </div>
+        </div>
+
+        <div id="word-scramble" class="word-scramble">
+            <h2>Unscramble the Word</h2>
+            <p class="scrambled-word" id="scrambled-word"></p>
+            <input type="text" class="word-input" id="word-input" placeholder="Enter your answer">
+            <p class="hint-text" id="hint-text"></p>
+            <button class="primary-btn" id="check-word">Check Answer</button>
+            <button class="primary-btn" id="next-word">Next Word</button>
+            <div class="score-display">
+                Words Solved: <span id="words-solved">0</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const quizData = {
+            iq: [
+                {
+                    question: "If a red house is made from red bricks, a blue house is made from blue bricks, what is a greenhouse made from?",
+                    options: ["Green Bricks", "Glass", "Wood", "Concrete"],
+                    correct: 1
+                },
+                {
+                    question: "What comes next in the sequence: 2, 4, 8, 16, ...",
+                    options: ["20", "24", "32", "64"],
+                    correct: 2
+                },
+                {
+                    question: "Which number should come next: 1, 1, 2, 3, 5, 8, ...",
+                    options: ["9", "10", "13", "15"],
+                    correct: 2
+                },
+                {
+                    question: "If you rearrange the letters 'CIFAIPC', you would have the name of a(n):",
+                    options: ["City", "Animal", "Ocean", "Country"],
+                    correct: 2
+                },
+                {
+                    question: "Which number is the odd one out: 2, 3, 4, 7, 8, 11, 12, 14?",
+                    options: ["14", "11", "7", "4"],
+                    correct: 1
+                },
+                {
+                    question: "What is the next letter in the sequence: O, T, T, F, F, S, S, ...",
+                    options: ["E", "N", "S", "T"],
+                    correct: 0
+                },
+                {
+                    question: "A clock strikes once at 1 o'clock, twice at 2 o'clock, thrice at 3 o'clock and so on. How many times will it strike in 24 hours?",
+                    options: ["78", "136", "156", "196"],
+                    correct: 2
+                },
+                {
+                    question: "If South-East becomes North, North-East becomes West, then West becomes:",
+                    options: ["North-East", "South-East", "South-West", "North-West"],
+                    correct: 1
+                },
+                {
+                    question: "In a certain code, '467' means 'leaves are green', '485' means 'green is good' and '739' means 'they are playing'. Which digit stands for 'are'?",
+                    options: ["7", "4", "6", "9"],
+                    correct: 0
+                },
+                {
+                    question: "If FRIEND is coded as HUMJTK, how is CANDLE coded?",
+                    options: ["EDRIRL", "DCQHQK", "ESJHQK", "DCQHJK"],
+                    correct: 1
+                }
+            ],
+            gk: [
+                {
+                    question: "What is the capital of India?",
+                    options: ["Mumbai", "New Delhi", "Bangalore", "Kolkata"],
+                    correct: 1
+                },
+                {
+                    question: "Who wrote 'Romeo and Juliet'?",
+                    options: ["Charles Dickens", "William Shakespeare", "Jane Austen", "Mark Twain"],
+                    correct: 1
+                },
+                {
+                    question: "What is the largest planet in our solar system?",
+                    options: ["Mars", "Saturn", "Jupiter", "Neptune"],
+                    correct: 2
+                },
+                {
+                    question: "Which is the longest river in the world?",
+                    options: ["Amazon", "Nile", "Yangtze", "Mississippi"],
+                    correct: 1
+                },
+                {
+                    question: "Who painted the Mona Lisa?",
+                    options: ["Vincent van Gogh", "Pablo Picasso", "Leonardo da Vinci", "Michelangelo"],
+                    correct: 2
+                },
+                {
+                    question: "What is the chemical symbol for gold?",
+                    options: ["Ag", "Fe", "Au", "Cu"],
+                    correct: 2
+                },
+                {
+                    question: "Which country is known as the Land of the Rising Sun?",
+                    options: ["China", "South Korea", "Japan", "Thailand"],
+                    correct: 2
+                },
+                {
+                    question: "What is the smallest prime number?",
+                    options: ["0", "1", "2", "3"],
+                    correct: 2
+                },
+                {
+                    question: "Who is known as the father of computers?",
+                    options: ["Charles Babbage", "Alan Turing", "Bill Gates", "Steve Jobs"],
+                    correct: 0
+                },
+                {
+                    question: "Which planet is known as the Red Planet?",
+                    options: ["Venus", "Mars", "Jupiter", "Mercury"],
+                    correct: 1
+                }
+            ]
+        };
+
+        const wordScrambleData = [
+            { word: "PROGRAMMING", hint: "Writing code for computers" },
+            { word: "ALGORITHM", hint: "Step-by-step procedure for calculations" },
+            { word: "DATABASE", hint: "Organized collection of data" },
+            { word: "INTERFACE", hint: "Point of interaction between components" },
+            { word: "JAVASCRIPT", hint: "Popular web programming language" },
+            { word: "FRAMEWORK", hint: "Platform for developing software applications" },
+            { word: "DEBUGGING", hint: "Finding and fixing code errors" },
+            { word: "VARIABLE", hint: "Container for storing data values" },
+            { word: "FUNCTION", hint: "Reusable block of code" },
+            { word: "COMPILER", hint: "Translates code to machine language" }
+        ];
+
+        let currentType = 'iq';
+        let currentQuestion = 0;
+        let score = 0;
+        let wordIndex = 0;
+        let wordsSolved = 0;
+
+        // DOM elements
+        const questionElement = document.getElementById('question');
+        const optionsContainer = document.getElementById('options');
+        const prevButton = document.getElementById('prev-btn');
+        const nextButton = document.getElementById('next-btn');
+        const scoreElement = document.getElementById('score');
+        const totalElement = document.getElementById('total');
+        const gameTypeButtons = document.querySelectorAll('.game-type-btn');
+        const quizSection = document.getElementById('quiz-section');
+        const wordScrambleSection = document.getElementById('word-scramble');
+        const resultContainer = document.getElementById('result');
+
+        // Word Scramble elements
+        const scrambledWordElement = document.getElementById('scrambled-word');
+        const wordInput = document.getElementById('word-input');
+        const hintText = document.getElementById('hint-text');
+        const checkWordButton = document.getElementById('check-word');
+        const nextWordButton = document.getElementById('next-word');
+        const wordsSolvedElement = document.getElementById('words-solved');
+
+        function scrambleWord(word) {
+            const arr = word.split('');
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr.join('');
+        }
+
+        function showWordScramble() {
+            const currentWord = wordScrambleData[wordIndex];
+            scrambledWordElement.textContent = scrambleWord(currentWord.word);
+            hintText.textContent = `Hint: ${currentWord.hint}`;
+            wordInput.value = '';
+            wordInput.focus();
+        }
+
+        function checkWord() {
+            const currentWord = wordScrambleData[wordIndex].word;
+            const userInput = wordInput.value.toUpperCase();
+            
+            if (userInput === currentWord) {
+                wordsSolved++;
+                wordsSolvedElement.textContent = wordsSolved;
+                alert('Correct! Well done!');
+                if (wordIndex < wordScrambleData.length - 1) {
+                    wordIndex++;
+                    showWordScramble();
+                } else {
+                    alert('Congratulations! You\'ve completed all words!');
+                    wordIndex = 0;
+                    showWordScramble();
+                }
+            } else {
+                alert('Try again!');
+            }
+        }
+
+        function showResult() {
+            const resultText = document.getElementById('result-text');
+            const percentage = (score / quizData[currentType].length) * 10;
+            let message = '';
+            let className = '';
+
+            if (percentage === 10) {
+                message = 'Excellent! Perfect score!';
+                className = 'result-excellent';
+            } else if (percentage >= 8) {
+                message = 'Good job! Well done!';
+                className = 'result-good';
+            } else if (percentage >= 5) {
+                message = 'Not bad, but there\'s room for improvement.';
+                className = 'result-bad';
+            } else {
+                message = 'You need more practice.';
+                className = 'result-very-bad';
+            }
+
+            resultText.textContent = message;
+            resultContainer.className = `result-container ${className}`;
+            resultContainer.style.display = 'block';
+        }
+
+        function initQuiz() {
+            currentQuestion = 0;
+            score = 0;
+            showQuestion();
+            updateScore();
+            resultContainer.style.display = 'none';
+        }
+
+        function showQuestion() {
+            const question = quizData[currentType][currentQuestion];
+            questionElement.textContent = question.question;
+            
+            optionsContainer.innerHTML = '';
+            question.options.forEach((option, index) => {
+                const button = document.createElement('button');
+                button.className = 'option-btn';
+                button.textContent = option;
+                button.onclick = () => checkAnswer(index);
+                optionsContainer.appendChild(button);
+            });
+
+            prevButton.disabled = currentQuestion === 0;
+            nextButton.disabled = currentQuestion === quizData[currentType].length - 1;
+        }
+
+        function checkAnswer(selectedIndex) {
+            const question = quizData[currentType][currentQuestion];
+            const options = document.querySelectorAll('.option-btn');
+
+            options.forEach((option, index) => {
+                option.disabled = true;
+                if (index === question.correct) {
+                    option.classList.add('correct');
+                } else if (index === selectedIndex && index !== question.correct) {
+                    option.classList.add('wrong');
+                }
+            });
+
+            if (selectedIndex === question.correct) {
+                score++;
+                updateScore();
+            }
+
+            if (currentQuestion === quizData[currentType].length - 1) {
+                setTimeout(showResult, 1500);
+            } else {
+                setTimeout(() => {
+                    currentQuestion++;
+                    showQuestion();
+                }, 1500);
+            }
+        }
+
+        function updateScore() {
+            scoreElement.textContent = score;
+            totalElement.textContent = quizData[currentType].length;
+        }
+
+        prevButton.onclick = () => {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                showQuestion();
+            }
+        };
+
+        nextButton.onclick = () => {
+            if (currentQuestion < quizData[currentType].length - 1) {
+                currentQuestion++;
+                showQuestion();
+            }
+        };
+
+        // Update the game type selection handler
+        gameTypeButtons.forEach(button => {
+            button.onclick = () => {
+                const type = button.dataset.type;
+                gameTypeButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+        
+                // Hide all sections first
+                quizSection.style.display = 'none';
+                wordScrambleSection.style.display = 'none';
+                document.getElementById('html-section').style.display = 'none';
+        
+                if (type === 'word') {
+                    wordScrambleSection.style.display = 'block';
+                    showWordScramble();
+                } else if (type === 'html') {
+                    document.getElementById('html-section').style.display = 'block';
+                    currentHtmlQuestion = 0;
+                    htmlScore = 0;
+                    showHtmlQuestion();
+                } else {
+                    quizSection.style.display = 'block';
+                    if (type !== currentType) {
+                        currentType = type;
+                        initQuiz();
+                    }
+                }
+            };
+        });
+        
+        // Update the highlightHtmlSyntax function
+        function highlightHtmlSyntax(code) {
+            // First escape HTML entities
+            code = code.replace(/[&<>"']/g, char => ({
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                '\'': '&#39;'
+            }[char]));
+        
+            // Then apply syntax highlighting
+            return code
+                .replace(/(&lt;\/?[\w-]+)/g, '<span class="tag">$1</span>')
+                .replace(/([\w-]+)=/g, '<span class="attribute">$1</span>=')
+                .replace(/"([^"]*)"(?=[^<]*>)/g, '<span class="value">"$1"</span>')
+                .replace(/(&lt;!--[\s\S]*?--&gt;)/g, '<span class="comment">$1</span>');
+        }
+
+        checkWordButton.onclick = checkWord;
+        nextWordButton.onclick = () => {
+            wordIndex = (wordIndex + 1) % wordScrambleData.length;
+            showWordScramble();
+        };
+
+        wordInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                checkWord();
+            }
+        });
+
+        // Initialize the quiz
+        initQuiz();
+    </script>
+
+    <footer class="copyright">
+        <div class="footer-content">
+            <img src="images/Logo.png" alt="Shubham Kumar Logo" class="footer-logo">
+            <p>&copy; 2024 Shubham Kumar. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>
+
+<!-- Add this section after your existing quiz sections -->
+<div id="html-section" class="html-section" style="display: none;">
+    <div class="question-container">
+        <h2 id="html-question">HTML Question</h2>
+        <div class="code-preview">
+            <pre><code id="code-sample" class="language-html"></code></pre>
+        </div>
+        <div class="options-container" id="html-options"></div>
+    </div>
+
+    <div class="quiz-controls">
+        <button id="html-prev-btn" class="primary-btn" disabled>Previous</button>
+        <button id="html-next-btn" class="primary-btn">Next</button>
+    </div>
+
+    <div class="score-display">
+        Score: <span id="html-score">0</span> / <span id="html-total">0</span>
+    </div>
+</div>
+
+const htmlQuestions = [
+    {
+        question: "What is the correct HTML structure for a basic webpage?",
+        code: `<!DOCTYPE html>
+<html>
+<head>
+    <title>Page Title</title>
+</head>
+<body>
+    <h1>Hello World</h1>
+</body>
+</html>`,
+        options: [
+            "This is the correct basic HTML structure",
+            "The DOCTYPE declaration is missing",
+            "The head section should come after body",
+            "The title tag should be in the body"
+        ],
+        correct: 0
+    },
+    {
+        question: "Which HTML tag is used for creating a hyperlink?",
+        code: `<!-- Example of a hyperlink -->
+<a href="https://example.com">Visit Example.com</a>`,
+        options: [
+            "<link>",
+            "<href>",
+            "<a>",
+            "<url>"
+        ],
+        correct: 2
+    },
+    {
+        question: "How do you create an HTML table?",
+        code: `<table>
+    <tr>
+        <th>Header 1</th>
+        <th>Header 2</th>
+    </tr>
+    <tr>
+        <td>Data 1</td>
+        <td>Data 2</td>
+    </tr>
+</table>`,
+        options: [
+            "This is incorrect table syntax",
+            "This is correct table syntax",
+            "<th> should be replaced with <thead>",
+            "<tr> should be replaced with <row>"
+        ],
+        correct: 1
+    }
+];
+
+let currentHtmlQuestion = 0;
+let htmlScore = 0;
+
+// Add HTML quiz button to game type selector
+const htmlButton = document.createElement('button');
+htmlButton.className = 'game-type-btn';
+htmlButton.dataset.type = 'html';
+htmlButton.textContent = 'HTML Quiz';
+document.querySelector('.game-type-selector').appendChild(htmlButton);
+
+// HTML quiz functions
+function showHtmlQuestion() {
+    const question = htmlQuestions[currentHtmlQuestion];
+    document.getElementById('html-question').textContent = question.question;
+    
+    // Display code with syntax highlighting
+    const codeElement = document.getElementById('code-sample');
+    codeElement.innerHTML = highlightHtmlSyntax(question.code);
+    
+    const optionsContainer = document.getElementById('html-options');
+    optionsContainer.innerHTML = '';
+    question.options.forEach((option, index) => {
+        const button = document.createElement('button');
+        button.className = 'option-btn';
+        button.textContent = option;
+        button.onclick = () => checkHtmlAnswer(index);
+        optionsContainer.appendChild(button);
+    });
+
+    // Update navigation buttons
+    document.getElementById('html-prev-btn').disabled = currentHtmlQuestion === 0;
+    document.getElementById('html-next-btn').disabled = currentHtmlQuestion === htmlQuestions.length - 1;
+}
+
+// Update the highlightHtmlSyntax function
+function highlightHtmlSyntax(code) {
+    // Escape HTML entities first
+    code = code.replace(/[&<>"']/g, function(match) {
+        const entities = {
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            '\'': '&#39;'
+        };
+        return entities[match];
+    });
+
+    // Apply syntax highlighting
+    return code
+        .replace(/(&lt;\/?)([\w-]+)/g, '$1<span class="tag">$2</span>')
+        .replace(/([\w-]+)=["\']/g, '<span class="attribute">$1</span>=')
+        .replace(/"([^"]*)"(?=[^<]*>)/g, '<span class="value">"$1"</span>')
+        .replace(/(&lt;!--[^-]*--&gt;)/g, '<span class="comment">$1</span>');
+}
+
+function checkHtmlAnswer(selectedIndex) {
+    const question = htmlQuestions[currentHtmlQuestion];
+    const options = document.querySelectorAll('#html-options .option-btn');
+
+    options.forEach((option, index) => {
+        option.disabled = true;
+        if (index === question.correct) {
+            option.classList.add('correct');
+        } else if (index === selectedIndex && index !== question.correct) {
+            option.classList.add('wrong');
+        }
+    });
+
+    if (selectedIndex === question.correct) {
+        htmlScore++;
+        document.getElementById('html-score').textContent = htmlScore;
+    }
+
+    if (currentHtmlQuestion === htmlQuestions.length - 1) {
+        setTimeout(showHtmlResult, 1500);
+    } else {
+        setTimeout(() => {
+            currentHtmlQuestion++;
+            showHtmlQuestion();
+        }, 1500);
+    }
+}
+
+function showHtmlResult() {
+    const resultText = document.getElementById('html-result-text');
+    const percentage = (htmlScore / htmlQuestions.length) * 10;
+    let message = '';
+    let className = '';
+
+    if (percentage === 10) {
+        message = 'Perfect! You\'re an HTML master!';
+        className = 'result-excellent';
+    } else if (percentage >= 8) {
+        message = 'Great job! You know your HTML well!';
+        className = 'result-good';
+    } else if (percentage >= 5) {
+        message = 'Good effort! Keep practicing your HTML!';
+        className = 'result-bad';
+    } else {
+        message = 'Time to review HTML basics!';
+        className = 'result-very-bad';
+    }
+
+    resultText.textContent = message;
+    document.getElementById('html-result').className = `result-container ${className}`;
+    document.getElementById('html-result').style.display = 'block';
+}
